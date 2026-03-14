@@ -19,21 +19,6 @@ async def init_db():
         )
         """)
         await db.execute("""
-        CREATE TABLE IF NOT EXISTS prs (
-            pr_number TEXT,
-            title TEXT,
-            url TEXT,
-            approved INTEGER
-        )
-        """)
-        await db.execute("""
-        CREATE TABLE IF NOT EXISTS completion (
-            user_id TEXT,
-            date TEXT,
-            completed INTEGER
-        )
-        """)
-        await db.execute("""
         CREATE TABLE IF NOT EXISTS scrum_threads (
             date TEXT
         )
