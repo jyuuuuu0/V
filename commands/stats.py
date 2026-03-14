@@ -29,4 +29,4 @@ class Stats(commands.Cog):
         total = done + not_done
         rate = int((done / total) * 100)
 
-        await ctx.send(f"📊 {ctx.author.display_name}남의 스크럼 통계\n완료율 {rate}% ({done}⭕ / {not_done}❌)")
+        await ctx.send(f"📊 {ctx.author.display_name}님의 스크럼 통계\n완료율 {rate}% ({done}⭕ / {not_done}❌)")
