@@ -123,7 +123,7 @@ async def remind_pr(channel):
 
         if diff.total_seconds() >= 7200:  # 2시간 이상
             lines.append(f"⏰ #{r[0]} {r[1]} - {int(diff.total_seconds() // 3600)}시간째 리뷰 대기 중\n{r[2]}")
-        if lines:
-            text = "\n\n".join(lines)
-            fe_role_id = os.getenv("FE_ROLE_ID")
-            await channel.send(f"<@&{fe_role_id}> 📌 리뷰가 필요한 PR\n{text}")
+    if lines:
+        text = "\n\n".join(lines)
+        fe_role_id = os.getenv("FE_ROLE_ID")
+        await channel.send(f"<@&{fe_role_id}> 📌 리뷰가 필요한 PR\n{text}")
