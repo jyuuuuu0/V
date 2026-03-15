@@ -125,7 +125,7 @@ async def closing(bot):
     thread = await get_today_thread(bot)
     if not thread:
         return
-    await thread.send("\n⏰ 오늘 업무 종료까지 1시간 남았습니다\n\n오늘 할 일을 마무리해주세요!\n")
+    await thread.send("\n⏰ 오늘 업무 종료까지 1시간 남았습니다\n\n오늘 할 일을 마무리해주세요!\n오늘 할 일을 마무리했다면 ⭕, 못했다면 ❌ 리액션을 눌러주세요.")
 
 
 async def remind_pr(bot):
