@@ -12,7 +12,7 @@ from commands.pr_list import PRList
 from commands.stats import Stats
 from commands.help import Help
 
-load_dotenv()
+load_dotenv(override=True)
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
