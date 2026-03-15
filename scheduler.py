@@ -42,11 +42,7 @@ def start_scheduler(bot):
 async def get_today_thread(bot):
     forum_channel = bot.get_channel(CHANNEL_ID)
     today = str(datetime.date.today())
-    thread_name = f"데일리 스크럼 - {today}"
-
-
-    print(f"찾는 스레드 이름: {thread_name}")
-    print(f"포럼 채널 스레드 목록: {[t.name for t in forum_channel.threads]}")
+    thread_name = f"{today} - 데일리 스크럼"
 
     for thread in forum_channel.threads:
         if thread.name == thread_name:
