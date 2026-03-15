@@ -8,12 +8,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
+# 상단에 KST 시간 함수 추가
+def get_kst_now():
+    return datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+
 
 def start_scheduler(bot):
 
     @tasks.loop(minutes=1)
     async def scheduler():
-        now = datetime.datetime.now()
+        now = get_kst_now()
 
         # 오전 8시 스크럼 생성
         if now.hour == 8 and now.minute == 0:
@@ -41,8 +45,8 @@ def start_scheduler(bot):
 
 async def get_today_thread(bot):
     forum_channel = bot.get_channel(CHANNEL_ID)
-    today = str(datetime.date.today())
-    thread_name = f"{today} - 데일리 스크럼"
+    today = get_kst_now().date()
+    thread_name = f"{today.strftime('%m.%d')} 데일리스크럼"
 
     for thread in forum_channel.threads:
         if thread.name == thread_name:
@@ -52,15 +56,15 @@ async def get_today_thread(bot):
 
 async def create_scrum(bot):
     forum_channel = bot.get_channel(CHANNEL_ID)
-    today = datetime.date.today()
-    yesterday = str(today - datetime.timedelta(days=1))
-    thread_name = f"{today} - 데일리 스크럼"
+    today = get_kst_now().date()
+    yesterday = today - datetime.timedelta(days=1)
+    thread_name = f"{today.strftime('%m.%d')} 데일리스크럼"
 
     incomplete_text = ""
     async with aiosqlite.connect("scrum.db") as db:
         cursor = await db.execute(
             "SELECT user_id, task FROM completion WHERE date=? AND completed=0",
-            (yesterday,)
+            (str(yesterday),)
         )
         rows = await cursor.fetchall()
 
@@ -99,7 +103,7 @@ async def remind_missing(bot):
     if not thread:
         return
 
-    today = str(datetime.date.today())
+    today = str(get_kst_now().date())
     async with aiosqlite.connect("scrum.db") as db:
         cursor = await db.execute(
             "SELECT user_id FROM scrum WHERE date=?", (today,)
@@ -125,7 +129,7 @@ async def closing(bot):
 
 
 async def remind_pr(bot):
-    now = datetime.datetime.now()
+    now = get_kst_now()
 
     async with aiosqlite.connect("scrum.db") as db:
         cursor = await db.execute(
