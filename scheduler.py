@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
-# 상단에 KST 시간 함수 추가
+EXCLUDE_IDS = {"896309682820501506"}
+
 def get_kst_now():
     return datetime.datetime.utcnow() + datetime.timedelta(hours=9)
 
@@ -97,7 +98,6 @@ async def create_scrum(bot):
         )
         await db.commit()
 
-
 async def remind_missing(bot):
     thread = await get_today_thread(bot)
     if not thread:
@@ -113,13 +113,14 @@ async def remind_missing(bot):
     written_ids = {r[0] for r in rows}
     missing = [
         member for member in thread.guild.members
-        if not member.bot and str(member.id) not in written_ids
+        if not member.bot
+        and str(member.id) not in written_ids
+        and str(member.id) not in EXCLUDE_IDS 
     ]
 
     if missing:
         mentions = " ".join([m.mention for m in missing])
         await thread.send(f"{mentions}\n아직 데일리 스크럼 작성하지 않았습니다! 빨리 쓰세요 🔥")
-
 
 async def closing(bot):
     thread = await get_today_thread(bot)
